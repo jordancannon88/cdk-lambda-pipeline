@@ -1,8 +1,7 @@
 import json
-import pytest
 
 from aws_cdk import core
-from pipeline.lambda_stack import LambdaStack
+from stacks.pipeline.lambda_stack import LambdaStack
 
 
 def get_template():

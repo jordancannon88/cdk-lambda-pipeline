@@ -2,9 +2,9 @@
 
 from aws_cdk import core
 
-from repo.codecommit_stack import CodeCommitStack
-from pipeline.pipeline_stack import PipelineStack
-from pipeline.lambda_stack import LambdaStack
+from stacks.repo.codecommit_stack import CodeCommitStack
+from stacks.pipeline.pipeline_stack import PipelineStack
+from stacks.pipeline.lambda_stack import LambdaStack
 
 app = core.App()
 
