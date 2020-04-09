@@ -1,5 +1,9 @@
 
-# Lambda CI/CD Pipeline
+# Overview
+
+A CI/CD pipeline with CodeCommit, CodeBuild, CodeDeploy, CodePipeline, and Lambda. The pipeline pulls, tests, builds, and deploys Lambdas using blue-green deployment and CDK.
+
+# Lambda CI/CD Pipeline instructions
 
 Deploy the CDK CodeCommit Stack:
 
@@ -15,7 +19,7 @@ Deploy the pipeline:
 $ cdk deploy PipelineDeployingLambdaStack
 ```
 
-The pipeline will be created and will pull from the repo and deploy all functions with the `lambda` folder.
+The pipeline will be created and will pull from the CodeCommit repo and begin it's process before deploying all functions within the `lambda` folder.
 
 # CDK Python project instructions
 

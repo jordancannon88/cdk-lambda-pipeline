@@ -11,8 +11,16 @@ class PipelineStack(core.Stack):
                  lambda_code: lambda_.CfnParametersCode = None, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        # [ CodeCommit: Repository ]
+        #
+        # Grabs the repository the pipeline will be pulling from.
+
         code = codecommit.Repository.from_repository_name(self, "ImportedRepo",
                                                           "LambdaTest")
+
+        # [ CodeBuild: Project: CDK ]
+        #
+        # Creates the project for building the Lambda CloudFormation template using CDK.
 
         cdk_build = codebuild.PipelineProject(self, "CdkBuild",
                                               build_spec=codebuild.BuildSpec.from_object(dict(
@@ -34,6 +42,10 @@ class PipelineStack(core.Stack):
                                                           "LambdaStack.template.json"]},
                                                   environment=dict(buildImage=
                                                                    codebuild.LinuxBuildImage.STANDARD_2_0))))
+
+        # [ CodeBuild: Project: Lambda ]
+        #
+        # Creates the project for building the Lambda Functions.
 
         lambda_build = codebuild.PipelineProject(self, 'LambdaBuild',
                                                  build_spec=codebuild.BuildSpec.from_object(dict(
@@ -62,11 +74,21 @@ class PipelineStack(core.Stack):
                                                      environment=dict(buildImage=
                                                                       codebuild.LinuxBuildImage.STANDARD_2_0))))
 
+        # [ CodePipeline: Artifacts ]
+        #
+        # Creates the pipelines.
+
         source_output = codepipeline.Artifact()
         cdk_build_output = codepipeline.Artifact("CdkBuildOutput")
         lambda_build_output = codepipeline.Artifact("LambdaBuildOutput")
 
+        # [ S3: Location ]
+
         lambda_location = lambda_build_output.s3_location
+
+        # [ CodePipeline ]
+        #
+        # Creates the pipelines.
 
         pipeline = codepipeline.Pipeline(self, "Pipeline",
                                          stages=[
@@ -104,6 +126,10 @@ class PipelineStack(core.Stack):
                                                                              extra_inputs=[lambda_build_output])])
                                          ]
                                          )
+
+        # [ Tags ]
+        #
+        # Adds tags.
 
         core.Tag.add(pipeline, "Creator", "Jordan")
         core.Tag.add(lambda_build, "Creator", "Jordan")
