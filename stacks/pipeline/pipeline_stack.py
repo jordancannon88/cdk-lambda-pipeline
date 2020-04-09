@@ -91,48 +91,39 @@ class PipelineStack(core.Stack):
         #
         # Creates the pipelines.
 
-        pipeline = codepipeline.Pipeline(self, "Pipeline",
-                                         stages=[
-                                             codepipeline.StageProps(stage_name="Source",
-                                                                     actions=[
-                                                                         codepipeline_actions.CodeCommitSourceAction(
-                                                                             action_name="CodeCommit_Source",
-                                                                             repository=code,
-                                                                             output=source_output)]),
-                                             codepipeline.StageProps(stage_name="Build",
-                                                                     actions=[
-                                                                         codepipeline_actions.CodeBuildAction(
-                                                                             action_name="Lambda_Build",
-                                                                             project=lambda_build,
-                                                                             input=source_output,
-                                                                             outputs=[lambda_build_output]),
-                                                                         codepipeline_actions.CodeBuildAction(
-                                                                             action_name="CDK_Build",
-                                                                             project=cdk_build,
-                                                                             input=source_output,
-                                                                             outputs=[cdk_build_output])]),
-                                             codepipeline.StageProps(stage_name="Deploy",
-                                                                     actions=[
-                                                                         codepipeline_actions.CloudFormationCreateUpdateStackAction(
-                                                                             action_name="Lambda_CFN_Deploy",
-                                                                             template_path=cdk_build_output.at_path(
-                                                                                 "LambdaStack.template.json"),
-                                                                             stack_name="LambdaDeploymentStack",
-                                                                             admin_permissions=True,
-                                                                             parameter_overrides=dict(
-                                                                                 lambda_code.assign(
-                                                                                     bucket_name=lambda_location.bucket_name,
-                                                                                     object_key=lambda_location.object_key,
-                                                                                     object_version=lambda_location.object_version)),
-                                                                             extra_inputs=[lambda_build_output])])
-                                         ]
-                                         )
-
-        # [ Tags ]
-        #
-        # Adds tags.
-
-        # core.Tag.add(pipeline, "Creator", "Jordan")
-        # core.Tag.add(lambda_build, "Creator", "Jordan")
-        # core.Tag.add(cdk_build, "Creator", "Jordan")
-        # core.Tag.add(code, "Creator", "Jordan")
+        codepipeline.Pipeline(self, "Pipeline",
+                              stages=[
+                                  codepipeline.StageProps(stage_name="Source",
+                                                          actions=[
+                                                              codepipeline_actions.CodeCommitSourceAction(
+                                                                  action_name="CodeCommit_Source",
+                                                                  repository=code,
+                                                                  output=source_output)]),
+                                  codepipeline.StageProps(stage_name="Build",
+                                                          actions=[
+                                                              codepipeline_actions.CodeBuildAction(
+                                                                  action_name="Lambda_Build",
+                                                                  project=lambda_build,
+                                                                  input=source_output,
+                                                                  outputs=[lambda_build_output]),
+                                                              codepipeline_actions.CodeBuildAction(
+                                                                  action_name="CDK_Build",
+                                                                  project=cdk_build,
+                                                                  input=source_output,
+                                                                  outputs=[cdk_build_output])]),
+                                  codepipeline.StageProps(stage_name="Deploy",
+                                                          actions=[
+                                                              codepipeline_actions.CloudFormationCreateUpdateStackAction(
+                                                                  action_name="Lambda_CFN_Deploy",
+                                                                  template_path=cdk_build_output.at_path(
+                                                                      "LambdaStack.template.json"),
+                                                                  stack_name="LambdaDeploymentStack",
+                                                                  admin_permissions=True,
+                                                                  parameter_overrides=dict(
+                                                                      lambda_code.assign(
+                                                                          bucket_name=lambda_location.bucket_name,
+                                                                          object_key=lambda_location.object_key,
+                                                                          object_version=lambda_location.object_version)),
+                                                                  extra_inputs=[lambda_build_output])])
+                              ]
+                              )
