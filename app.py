@@ -12,7 +12,7 @@ app = core.App()
 #
 # The repository to hold this entire application.
 
-CodeCommitStack(app, "CodeCommitStack")
+repo_stack = CodeCommitStack(app, "CodeCommitStack")
 
 # [ LambdaStack ]
 #
@@ -24,8 +24,15 @@ lambda_stack = LambdaStack(app, "LambdaStack")
 #
 # A pipeline for pulling, testing, and building Lambdas.
 
-PipelineStack(app, "PipelineDeployingLambdaStack",
-              lambda_code=lambda_stack.lambda_code,
-              env={'region': 'us-west-2'})
+pipeline_stack = PipelineStack(app, "PipelineDeployingLambdaStack",
+                               lambda_code=lambda_stack.lambda_code)
+
+# [ Tags ]
+#
+# Adds tags.
+
+core.Tag.add(repo_stack, "Creator", "Jordan")
+core.Tag.add(lambda_stack, "Creator", "Jordan")
+core.Tag.add(pipeline_stack, "Creator", "Jordan")
 
 app.synth()

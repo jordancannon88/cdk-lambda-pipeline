@@ -16,7 +16,7 @@ class PipelineStack(core.Stack):
         # Grabs the repository the pipeline will be pulling from.
 
         code = codecommit.Repository.from_repository_name(self, "ImportedRepo",
-                                                          "LambdaTest")
+                                                          "CodeCommitRepo")
 
         # [ CodeBuild: Project: CDK ]
         #
@@ -30,10 +30,15 @@ class PipelineStack(core.Stack):
                                                           commands=[
                                                               "npm install -g aws-cdk",
                                                               "cdk --version",
-                                                              "python --version"
+                                                              "python --version",
+                                                              "pip install -r requirements.txt"
                                                           ]),
+                                                      pre_build=dict(
+                                                          commands=[
+                                                              "python -m pytest tests"
+                                                          ]
+                                                      ),
                                                       build=dict(commands=[
-                                                          "pip install -r requirements.txt",
                                                           "cdk synth -o dist"
                                                       ])),
                                                   artifacts={
@@ -54,7 +59,6 @@ class PipelineStack(core.Stack):
                                                          install=dict(
                                                              commands=[
                                                                  "cd lambda",
-                                                                 # "python -m venv .env",
                                                                  "pip install -r requirements.txt"
                                                              ]
                                                          ),
@@ -63,14 +67,11 @@ class PipelineStack(core.Stack):
                                                                  "pytest"
                                                              ]
                                                          )
-                                                         # build=dict(
-                                                         #     commands="npm run build")
                                                      ),
                                                      artifacts={
                                                          "base-directory": "lambda",
                                                          "files": [
                                                              "index.py"]},
-                                                     # "node_modules/**/*"]},
                                                      environment=dict(buildImage=
                                                                       codebuild.LinuxBuildImage.STANDARD_2_0))))
 
@@ -131,7 +132,7 @@ class PipelineStack(core.Stack):
         #
         # Adds tags.
 
-        core.Tag.add(pipeline, "Creator", "Jordan")
-        core.Tag.add(lambda_build, "Creator", "Jordan")
-        core.Tag.add(cdk_build, "Creator", "Jordan")
-        core.Tag.add(code, "Creator", "Jordan")
+        # core.Tag.add(pipeline, "Creator", "Jordan")
+        # core.Tag.add(lambda_build, "Creator", "Jordan")
+        # core.Tag.add(cdk_build, "Creator", "Jordan")
+        # core.Tag.add(code, "Creator", "Jordan")

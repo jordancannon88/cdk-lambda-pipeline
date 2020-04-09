@@ -50,4 +50,4 @@ class LambdaStack(core.Stack):
         #
         # Adds tags.
 
-        core.Tag.add(func, "Creator", "Jordan")
+        # core.Tag.add(func, "Creator", "Jordan")

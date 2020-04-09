@@ -14,12 +14,12 @@ class CodeCommitStack(core.Stack):
         # Creates the repository to store the project in.
 
         commit = codecommit.Repository(self, 'CodeCommitRepo',
-                                       repository_name='LambdaTest',
-                                       description='LambdaTest repository'
+                                       repository_name='CodeCommitRepo',
+                                       description='CodeCommitRepo repository'
                                        )
 
         # [ Tags ]
         #
         # Adds tags.
 
-        core.Tag.add(commit, "Creator", "Jordan")
+        # core.Tag.add(commit, "Creator", "Jordan")

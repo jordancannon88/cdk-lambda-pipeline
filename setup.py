@@ -6,7 +6,7 @@ with open("README.md") as fp:
 
 
 setuptools.setup(
-    name="cdk-lambda-pipeline",
+    name="cdk-lambda-codepipeline",
     version="0.0.1",
 
     description="A CodePipeline for building, testing, and releasing Lambda functions.",
