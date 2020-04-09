@@ -6,14 +6,14 @@ with open("README.md") as fp:
 
 
 setuptools.setup(
-    name="ci_cd",
+    name="cdk-lambda-pipeline",
     version="0.0.1",
 
-    description="A sample CDK Python app",
+    description="A CodePipeline for building, testing, and releasing Lambda functions.",
     long_description=long_description,
     long_description_content_type="text/markdown",
 
-    author="author",
+    author="Jordan Cannon",
 
     package_dir={"": "lambda"},
     packages=setuptools.find_packages(where="lambda"),
